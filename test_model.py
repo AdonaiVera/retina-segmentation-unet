@@ -27,7 +27,7 @@ def calculate_metrics(y_true, y_pred):
     
     return dice, iou
 
-def test_model(weights_dir, X_test, y_test, num_examples=4, normalization=True):
+def test_model(weights_dir, X_test, y_test, num_examples=4, normalized=True):
     """
     Load trained model weights from a directory, predict on the test dataset, and show examples.
 
@@ -77,7 +77,7 @@ def test_model(weights_dir, X_test, y_test, num_examples=4, normalization=True):
             dice_norm, iou_norm = calculate_metrics(y_test[index], y_pred_bin)
 
             # Store metrics for summary
-            if normalization:
+            if normalized:
                 metrics_summary[weight_file] = {
                     "Dice with Normalization": dice_norm,
                     "IoU with normalization": iou_norm,
@@ -109,11 +109,12 @@ def test_model(weights_dir, X_test, y_test, num_examples=4, normalization=True):
 
 if __name__ == "__main__":
     data_path = "data/Data"  
-    _, _, X_test, _, _, y_test = preprocess_data(data_path, augment_data=True, normalized=False)
+    normalized=True
+    _, _, X_test, _, _, y_test = preprocess_data(data_path, augment_data=True, normalized=normalized)
     print(f"Testing set: {X_test.shape}, {y_test.shape}")
 
     # Path to the weights directory
     weights_dir = 'models/weights'
 
     # Run the test model function
-    test_model(weights_dir, X_test, y_test)
+    test_model(weights_dir, X_test, y_test, normalized=normalized)
